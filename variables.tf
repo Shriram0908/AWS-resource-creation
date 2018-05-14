@@ -23,20 +23,20 @@ variable "aws_region" {
 
 variable "private_subnet_cidr_block" {
   description = "Private subnet"
-  type        = "map"
-
-  default = {
-    subnet1 = "10.0.1.0/24"
-    subnet2 = "10.0.2.0/24"
-  }
+  type        = "list"
+  default     = ["10.0.1.0/24", "10.0.2.0/24"]
 }
 
 variable "public_subnet_cidr_block" {
   description = "Public subnet"
-  type        = "map"
+  type        = "list"
+  default     = ["10.0.11.0/24", "10.0.12.0/24"]
+}
 
-  default = {
-    subnet1 = "10.0.11.0/24"
-    subnet2 = "10.0.12.0/24"
-  }
+variable "sg_windows_rdp" {
+  default = "3389"
+}
+
+variable "sg_linux_rdp" {
+  default = "22"
 }

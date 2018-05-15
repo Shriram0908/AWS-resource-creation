@@ -40,3 +40,11 @@ variable "sg_windows_rdp" {
 variable "sg_linux_rdp" {
   default = "22"
 }
+
+variable "instance_type" {
+  default = "t2.micro"
+}
+
+variable "key_name" {
+  default = "Temp1"
+}

@@ -7,7 +7,7 @@ resource "aws_vpc" "main" {
   }
 }
 
-resource "aws_subnet" "Public" {
+resource "aws_subnet" "public" {
   count                   = "${length(var.public_subnet_cidr_block)}"
   vpc_id                  = "${aws_vpc.main.id}"
   cidr_block              = "${var.public_subnet_cidr_block[count.index]}"
@@ -18,7 +18,7 @@ resource "aws_subnet" "Public" {
   }
 }
 
-resource "aws_subnet" "Private" {
+resource "aws_subnet" "private" {
   count                   = "${length(var.private_subnet_cidr_block)}"
   vpc_id                  = "${aws_vpc.main.id}"
   cidr_block              = "${var.private_subnet_cidr_block[count.index]}"
@@ -29,7 +29,7 @@ resource "aws_subnet" "Private" {
   }
 }
 
-resource "aws_internet_gateway" "IGW" {
+resource "aws_internet_gateway" "igw" {
   vpc_id = "${aws_vpc.main.id}"
 
   tags {
@@ -37,7 +37,7 @@ resource "aws_internet_gateway" "IGW" {
   }
 }
 
-resource "aws_security_group" "Windows_Access" {
+resource "aws_security_group" "windows_access" {
   name        = "Windows_Access"
   vpc_id      = "${aws_vpc.main.id}"
   description = "Allows RDP access to Windows server from everywhere"
@@ -62,7 +62,7 @@ resource "aws_security_group" "Windows_Access" {
   }
 }
 
-resource "aws_security_group" "Linux_Access" {
+resource "aws_security_group" "linux_access" {
   name        = "Linux_Access"
   vpc_id      = "${aws_vpc.main.id}"
   description = "Allows SSH access to Linux server from everywhere"
@@ -92,7 +92,7 @@ resource "aws_route_table" "route_internet" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.IGW.id}"
+    gateway_id = "${aws_internet_gateway.igw.id}"
   }
 
   tags {

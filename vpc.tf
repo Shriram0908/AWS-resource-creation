@@ -87,6 +87,56 @@ resource "aws_security_group" "linux_access" {
   }
 }
 
+resource "aws_security_group" "vpc_access" {
+  name        = "VPC_Access"
+  vpc_id      = "${aws_vpc.main.id}"
+  description = "Allows Full access to all server from VPC"
+
+  ingress {
+    description = "Allows VPC access"
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    cidr_blocks = ["${aws_vpc.main.cidr_block}"]
+  }
+
+  egress {
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "Terraform VPC Access"
+  }
+}
+
+resource "aws_security_group" "web_access" {
+  name        = "VPC_Access"
+  vpc_id      = "${aws_vpc.main.id}"
+  description = "Allows web access to Linux server from everywhere"
+
+  ingress {
+    description = "Allows web access"
+    from_port   = "80"
+    to_port     = "80"
+    protocol    = "TCP"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "Terraform Web Access"
+  }
+}
+
 resource "aws_route_table" "route_internet" {
   vpc_id = "${aws_vpc.main.id}"
 
@@ -98,4 +148,10 @@ resource "aws_route_table" "route_internet" {
   tags {
     Name = "Terraform route table"
   }
+}
+
+resource "aws_route_table_association" "internet_access" {
+  count          = "${length(var.public_subnet_cidr_block)}"
+  subnet_id      = "${element(aws_subnet.public.*.id, count.index)}"
+  route_table_id = "${aws_route_table.route_internet.id}"
 }

@@ -21,6 +21,7 @@ resource "aws_instance" "web" {
   private_ip             = "10.0.11.20"
   iam_instance_profile   = "${aws_iam_instance_profile.s3_access_profile.name}"
   key_name               = "${var.key_name}"
+  user_data              = "${file("${path.module}/web_deploy.sh")}"
 
   tags {
     Name = "WEB01"

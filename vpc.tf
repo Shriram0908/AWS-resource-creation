@@ -113,7 +113,7 @@ resource "aws_security_group" "vpc_access" {
 }
 
 resource "aws_security_group" "web_access" {
-  name        = "VPC_Access"
+  name        = "Web_Access"
   vpc_id      = "${aws_vpc.main.id}"
   description = "Allows web access to Linux server from everywhere"
 
